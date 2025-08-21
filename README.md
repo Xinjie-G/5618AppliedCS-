@@ -19,3 +19,16 @@ sudo mkdir -p /var/log/openvpn
 
 # 将目录所有者更改为 openvpn 运行时使用的用户 (nobody)
 sudo chown nobody:nogroup /var/log/openvpn
+
+from socket import *
+
+serverPort = 12000
+serverSocket = socket(AF_INET, SOCK_DGRAM)
+serverSocket.bind(('', serverPort))
+
+print("The server is ready to receive")
+
+while 1:
+    message, clientAddress = serverSocket.recvfrom(2048)
+    modifiedMessage = message.decode().upper()
+    serverSocket.sendto(modifiedMessage.encode('utf-8'), clientAddress)
